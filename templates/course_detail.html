@@ -13,6 +13,15 @@
         <br>
         <h5>Category:</h5>
         <p>{{ course.category }}</p>
+        <br>
+        <h5>Chapters:</h5>
+            {% for chapter in course.chapter_set.all %}
+                <p class="card-text">{{ chapter.title }}</p>
+            {% endfor %}
+        <a href="{% url 'course_enrollment' course.pk %}"
+                       class="btn btn-primary">
+                        Start course
+        </a>
     </div>
 </div>
 {% endblock %}

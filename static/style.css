@@ -1,0 +1,25 @@
+body {
+  background-color: pink;
+}
+
+.content-container {
+    position: fixed;
+    left: 220px;
+    margin: 15px;
+}
+
+@media (min-width:992px) {
+  .vertical-nav {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      width: 200px;
+      height: 100%;
+      background-color: lightgreen;
+      color: white;
+      overflow-y: auto;
+      padding-top: 30px;
+
+    }
+}
+

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_content %}
+    <link rel="stylesheet" href="/static/style.css">
+
+<div class="content-container">
+    <h1>{{ course.title }}</h1>
+    {% block page_course_content %}{% endblock %}
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto flex-column vertical-nav">
+        {% for chapter in course.chapter_set.all %}
+                  <li class="nav-item">
+                    <a class="nav-link" style="font-weight: bold;" href="{% url 'course_enrollment' course.pk %}">{{ chapter.title }}</a>
+                  </li>
+                {% for task in chapter.task_set.all %}
+                  <li class="nav-item">
+                    <a class="nav-link" style="margin-left: 15px;" href="{% url 'task' task.pk %}">{{ task.title }}</a>
+                  </li>
+                {% endfor %}
+        {% endfor %}
+    </ul>
+  </div>
+</nav>
+
+{% endblock %}
