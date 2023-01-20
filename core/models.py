@@ -1,4 +1,10 @@
+from pathlib import Path
+
 from django.db import models
+import os
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 class CourseCategory(models.TextChoices):
     ENGLISH = 'English'
@@ -9,7 +15,7 @@ class Course(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
     description = models.TextField()
-    image = models.FilePathField(path="/img")
+    image = models.FilePathField(path= os.path.join(BASE_DIR, 'static/img'),)
     category = models.CharField(
         max_length=60,
         choices=CourseCategory.choices,
@@ -20,6 +26,7 @@ class Course(models.Model):
 
 
 class Chapter(models.Model):
+    title = models.CharField(max_length=100)
     theoreticatPart = models.TextField()
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
 
