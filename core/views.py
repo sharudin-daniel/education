@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from core.models import Course
 
@@ -9,6 +10,7 @@ def course_index(request):
     }
     return render(request, 'course_index.html', context)
 
+@login_required
 def course_detail(request, pk):
     course = Course.objects.get(pk=pk)
     context = {
