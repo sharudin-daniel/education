@@ -1,9 +1,7 @@
 {% extends "base_course.html" %}
 {% load static %}
 {% block page_course_content %}
-<div class="row">
     <div>
     {{ course.chapter_set.all.first.theoreticatPart }}
     </div>
-</div>
 {% endblock %}

@@ -1,11 +1,21 @@
 body {
   background-color: pink;
+  margin-bottom: 500px; /* add more or less based on your choice */
+}
+
+.not-visible{
+    background: aqua;
+    visibility: collapse;
+    display: none;
 }
 
 .content-container {
-    position: fixed;
-    left: 220px;
+    position: relative;
+    width: 100%;
+    top: 60px;
     margin: 15px;
+    overflow-y: auto;
+
 }
 
 @media (min-width:992px) {
