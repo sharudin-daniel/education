@@ -2,8 +2,8 @@ console.log("hui")
 
 const url = window.location.href
 
-const quizBox = document.getElementById('quiz-box')
-console.log(quizBox)
+const taskBox = document.getElementById('task-box')
+console.log(taskBox)
 
 let data
 
@@ -14,14 +14,14 @@ $.ajax( {
     data = response.data
     data.forEach(el => {
         for(const [question, answers] of Object.entries(el)) {
-        quizBox.innerHTML += `
+        taskBox.innerHTML += `
             <hr>
             <div class="mb-2">
                 <b>${question}</b>
             </div>
         `
             answers.forEach(answer =>{
-                quizBox.innerHTML += `
+                taskBox.innerHTML += `
                     <div>
                         <input type="radio" class="ans" id="${question}-${answer}" name="${question}" value="${answer}">
                         <label for="${question}">${answer}</label>
@@ -36,7 +36,7 @@ $.ajax( {
     }
 })
 
-const  quizForm = document.getElementById('quiz-form')
+const  taskForm = document.getElementById('task-form')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
 const sendData = () => {
@@ -59,7 +59,7 @@ $.ajax( {
     data: data,
     success: function(response){
         const results = response.results
-        quizForm.classList.add('not-visible')
+        taskForm.classList.add('not-visible')
 
         results.forEach(res => {
             const resDiv = document.createElement("div")
@@ -69,7 +69,7 @@ $.ajax( {
                 resDiv.classList.add(...cls)
 
                 if (resp == 'not answered') {
-                    resDiv.innerHTML += '<br> not answered'
+                    resDiv.innerHTML += '<ul> <li>Not answered</li></ul>'
                     resDiv.classList.add('bg-danger')
                 } else {
                     const answer = resp['answered']
@@ -77,12 +77,11 @@ $.ajax( {
 
                     if (answer == correct) {
                         resDiv.classList.add('bg-success')
-                        resDiv.innerHTML += `<br> answered: ${answer}`
+                        resDiv.innerHTML += `<ul> <li>Answered: ${answer}</li></ul>`
                     } else {
                         resDiv.classList.add('bg-danger')
-                        resDiv.innerHTML += ` <br> correct answered: ${correct}`
-                        resDiv.innerHTML += ` <br> answered: ${answer}`
-
+                        resDiv.innerHTML += `<ul> <li>Answered: ${answer}</li></ul>`
+                        resDiv.innerHTML += `<ul> <li>Correct answered: ${correct}</li></ul>`
                     }
                 }
             }
@@ -96,7 +95,7 @@ $.ajax( {
 })
 }
 
-quizForm.addEventListener('submit', e => {
+taskForm.addEventListener('submit', e => {
     e.preventDefault()
 
     sendData()
