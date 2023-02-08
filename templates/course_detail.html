@@ -38,10 +38,24 @@
         {% endfor %}
     </div>
 
-    <h3>Leave a comment</h3>
-        <form method="post">
-                  {% csrf_token %}
-          {{ comment_form.as_p }}
-          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
-        </form>
+    <h3>Оставьте свой комментарий:</h3>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        <div>
+        {% for field in comment_form %}
+        <div class="form-group">
+            {{field.label_tag}}
+            <div class="form-outline mb-4">{{field}}</div>
+            {% if field.errors%}
+                {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    {{error}}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+        </div>
+        <input type="submit" value="Send" >
+    </form>
 {% endblock %}
