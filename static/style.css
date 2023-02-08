@@ -7,13 +7,16 @@ body {
     display: none;
 }
 
+.darkened {
+    opacity: 0.6;
+    background: red;
+}
+
 .content-container {
-    position: relative;
-    width: 100%;
+    position: relative;width: 100%;
     top: 60px;
     margin: 15px;
     overflow-y: auto;
-
 }
 
 #menu__toggle {

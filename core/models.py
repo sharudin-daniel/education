@@ -1,8 +1,10 @@
 from pathlib import Path
+from django.utils import timezone
 
 from django.contrib.auth.models import User
 from django.db import models
 import os
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,11 +28,29 @@ class Course(models.Model):
         choices=CourseCategory.choices,
         default=CourseCategory.OTHER,
     )
-    rating = models.DecimalField(max_digits=3, decimal_places=2)
+    rating = models.DecimalField(max_digits=3, decimal_places=2,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(1)
+        ])
     numberOfUsers = models.IntegerField()
     def __str__(self):
         return f"{self.title}"
 
+class CourseComment(models.Model):
+    course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
+    author = models.CharField(max_length=100)
+    rating = models.IntegerField(
+        default=1,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(1)
+        ]
+    )
+    description = models.TextField()
+    date = models.DateField(default=timezone.now)
+    def __str__(self):
+        return f"Comment - author:{self.author} - date:{self.date}"
 
 class Chapter(models.Model):
     title = models.CharField(max_length=100)

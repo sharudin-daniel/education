@@ -1,6 +1,13 @@
 //Left sidebar
-$(document).ready(function(){
-	$('#nav-icon1,#nav-icon2,#nav-icon3,#nav-icon4').click(function(){
+const body = document.getElementsByTagName('body')[0];
+const burger = document.getElementsByClassName('hamburger-menu')[0];
+
+burger.addEventListener("click", function () {
 		$(this).toggleClass('open');
-	});
+		//TODO: не работает - случается двойной клик
+	// 	if ( body.classList.contains("darkened") ) {
+	// 	body.classList.remove("darkened");
+	// } else {
+	// 	body.classList.add("darkened");
+	// }
 });

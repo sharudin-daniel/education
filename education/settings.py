@@ -141,3 +141,8 @@ LOGOUT_REDIRECT_URL = "dashboard"
 
 SOCIAL_AUTH_GITHUB_KEY = 'bb1bb68706e0be8c3270'
 SOCIAL_AUTH_GITHUB_SECRET = 'e0d0a222d832b884068bad5cd7e05c3e1622da4c'
+
+LOGGING = {
+    'version': 1,                       # the dictConfig format version
+    'disable_existing_loggers': False,  # retain the default loggers
+}

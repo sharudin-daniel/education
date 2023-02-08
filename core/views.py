@@ -1,8 +1,16 @@
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
-from core.models import Course, Task, Question, Answer
 
+from core.forms import CommentForm
+from core.models import Course, Task, Question, Answer, CourseComment
+
+import logging
+
+logger = logging.getLogger(__name__)
+def landing_index(request):
+    return render(request, 'landing_index.html')
 
 def course_index(request):
     courses = Course.objects.all()
@@ -11,11 +19,27 @@ def course_index(request):
     }
     return render(request, 'course_index.html', context)
 
-@login_required
 def course_detail(request, pk):
     course = Course.objects.get(pk=pk)
+
+    if request.user.is_authenticated:
+        username = request.user.username
+    else:
+        username = 'Anonimus'
+
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.course = course
+            new_comment.author = username
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+
     context = {
-        'course': course
+        'course': course,
+        'comment_form': comment_form
     }
     return render(request, 'course_detail.html', context)
 

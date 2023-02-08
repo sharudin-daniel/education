@@ -24,4 +24,24 @@
         </a>
     </div>
 </div>
+    <div class="comments">
+    <h3>Comments:</h3>
+        {% for comment in course.coursecomment_set.all %}
+            <div class="col-md-8 card mb-4  mt-3 left  top">
+              <div class="card-body">
+                <h1>{% block title %} {{ comment.title }} {% endblock title %}</h1>
+                <p class=" text-muted">{{ comment.author }}, {{ comment.date }}</p>
+                <p class=" text-muted">{{ comment.rating }} Stars</p>
+                <p class="card-text ">{{ comment.description}}</p>
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h3>Leave a comment</h3>
+        <form method="post">
+                  {% csrf_token %}
+          {{ comment_form.as_p }}
+          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
+        </form>
 {% endblock %}
