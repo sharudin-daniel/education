@@ -34,6 +34,11 @@ def course_detail(request, pk):
             new_comment.course = course
             new_comment.author = username
             new_comment.save()
+            comments = course.coursecomment_set.all
+            sum = 0
+            for comment in comments:
+                sum += comment.rating
+            course.rating = sum / comments.count()
     else:
         comment_form = CommentForm()
 

@@ -14,6 +14,9 @@
         <h5>Category:</h5>
         <p>{{ course.category }}</p>
         <br>
+        <h5>Rating:</h5>
+        <p>{{ course.rating }}</p>
+        <br>
         <h5>Chapters:</h5>
             {% for chapter in course.chapter_set.all %}
                 <p class="card-text">{{ chapter.title }}</p>
