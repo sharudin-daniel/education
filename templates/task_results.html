@@ -7,7 +7,11 @@
     </div>
 <p>Задание уже выполнено</p>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="{% static 'quiz.js' %}"></script>
+    {% for result in question_results %}
+        <p> Вопрос: | {{ result.question }}</p>
+        <p> Правильный ответ: | {{ result.correct_answer }}</p>
+        <p> Ваш ответ: | {{ result.given_answer }}</p>
+    {% endfor %}
+
 {% endblock %}
 

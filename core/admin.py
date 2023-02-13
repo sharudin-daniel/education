@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core.models import Course, Chapter, Task, Question, Answer, CourseComment, TaskResult, CourseResult
+from core.models import Course, Chapter, Task, Question, Answer, CourseComment, TaskResult, CourseResult, QuestionResult
 
 
 @admin.register(Course)
@@ -32,5 +32,9 @@ class AnswerAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(CourseResult)
+class AnswerAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(QuestionResult)
 class AnswerAdmin(admin.ModelAdmin):
     pass

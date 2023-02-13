@@ -92,6 +92,13 @@ class TaskResult(models.Model):
             MinValueValidator(0)
         ])
 
+class QuestionResult(models.Model):
+    question = models.ForeignKey(to=Question, on_delete=models.CASCADE)
+    task_result = models.ForeignKey(to=TaskResult, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    correct_answer = models.TextField()
+    given_answer = models.TextField()
+
 class CourseResult(models.Model):
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

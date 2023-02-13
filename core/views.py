@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from core.forms import CommentForm
-from core.models import Course, Task, Question, Answer, CourseComment, CourseResult, TaskResult
+from core.models import Course, Task, Question, Answer, CourseComment, CourseResult, TaskResult, QuestionResult
 
 import logging
 
@@ -77,13 +77,46 @@ def task(request, pk):
     logger.warning(task_result)
 
     if task_result:
-        logger.warning("----------if----------")
         task_result = task_result[0]
-        context.update({"task_result": task_result})
+        question_results = task_result.questionresult_set.all()
+        context.update({"question_results": question_results})
         return render(request, 'task_results.html', context)
     else:
-        logger.warning("----------else----------")
-        return render(request, 'task.html', context)
+        if request.method == 'POST':
+            questions = []
+            data = request.POST
+            data_ = dict(data.lists())
+            data_.pop('csrfmiddlewaretoken')
+            for k in data_.keys():
+                question = Question.objects.get(description=k)
+                questions.append(question)
+            question_results = []
+            correct_answer = None
+            task_result = TaskResult.objects.create(task=task, user=request.user, score=0)
+            for q in questions:
+                a_selected = request.POST.get(q.description)
+
+                questions_answers = Answer.objects.filter(question=q)
+                for a in questions_answers:
+                    if a.correct:
+                        correct_answer = a.answer
+                question_result = QuestionResult.objects.create(question=q, user=request.user, correct_answer=correct_answer,
+                                                                    task_result=task_result, given_answer=a_selected)
+                question_results.append(question_result)
+
+            # todo: поменять скор (сейчас нолик)
+            context.update({"question_results": question_results})
+            return render(request, 'task_results.html', context)
+
+        else:
+            questions = []
+            for q in task.question_set.all():
+                answers = []
+                for a in q.answer_set.all():
+                    answers.append(a.answer)
+                questions.append({str(q): answers})
+            context.update({"questions": questions})
+            return render(request, 'task.html', context)
 
 def task_results(request, pk, context):
     logger.warning("----------task_results----------")
@@ -109,7 +142,6 @@ def save_task_view(request, pk):
         for k in data_.keys():
             question = Question.objects.get(description=k)
             questions.append(question)
-        print(questions)
 
         user = request.user
         task = Task.objects.get(pk=pk)
