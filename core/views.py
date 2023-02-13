@@ -1,10 +1,11 @@
+from audioop import reverse
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from core.forms import CommentForm
-from core.models import Course, Task, Question, Answer, CourseComment
+from core.models import Course, Task, Question, Answer, CourseComment, CourseResult, TaskResult
 
 import logging
 
@@ -43,15 +44,23 @@ def course_detail(request, pk):
     else:
         comment_form = CommentForm()
 
+    course_result = CourseResult.objects.filter(user=request.user).filter(course=course)
+    if course_result:
+        course_result = course_result[0]
+
     context = {
         'course': course,
-        'comment_form': comment_form
+        'comment_form': comment_form,
+        "course_result": course_result
     }
     return render(request, 'course_detail.html', context)
 
 @login_required
 def course_enrollment(request, pk):
     course = Course.objects.get(pk=pk)
+    course_result = CourseResult.objects.filter(user=request.user).filter(course=course)
+    if not course_result:
+        CourseResult.objects.create(course=course, user= request.user, score=0)
     context = {
         'course': course
     }
@@ -60,11 +69,24 @@ def course_enrollment(request, pk):
 @login_required
 def task(request, pk):
     task = Task.objects.get(pk=pk)
+    task_result = TaskResult.objects.filter(user=request.user).filter(task=task)
     context = {
         'task': task,
-        'course': task.chapter.course
+        'course': task.chapter.course,
     }
-    return render(request, 'task.html', context)
+    logger.warning(task_result)
+
+    if task_result:
+        logger.warning("----------if----------")
+        task_result = task_result[0]
+        context.update({"task_result": task_result})
+        return render(request, 'task_results.html', context)
+    else:
+        logger.warning("----------else----------")
+        return render(request, 'task.html', context)
+
+def task_results(request, pk, context):
+    logger.warning("----------task_results----------")
 
 def task_view_questions(request, pk):
     task = Task.objects.get(pk=pk)
@@ -75,7 +97,7 @@ def task_view_questions(request, pk):
             answers.append(a.answer)
         questions.append({str(q): answers})
     return JsonResponse({
-        'data':questions
+        'data': questions
     })
 
 def save_task_view(request, pk):

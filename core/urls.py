@@ -10,6 +10,7 @@ urlpatterns = [
     path("course-enrollment/<int:pk>/", views.course_enrollment, name="course_enrollment"),
     path("task/<int:pk>/", views.task, name="task"),
     path("task/<int:pk>/save/", views.save_task_view, name="save_task_view"),
+    path("task/<int:pk>/results/", views.task_results, name="task_results"),
     path("task/<int:pk>/data/", views.task_view_questions, name="task_view_questions"),
 
 ]

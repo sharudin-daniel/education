@@ -87,12 +87,19 @@ class Answer(models.Model):
 class TaskResult(models.Model):
     task = models.ForeignKey(to=Task, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.FloatField()
+    score = models.IntegerField(validators=[
+            MaxValueValidator(100),
+            MinValueValidator(0)
+        ])
 
-# class CourseResult(models.Model):
-#     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
-#     user = models.TextField(User, on_delete=models.CASCADE)
-#     score = models.FloatField()
-#
+class CourseResult(models.Model):
+    course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    score = models.IntegerField(validators=[
+            MaxValueValidator(100),
+            MinValueValidator(0)
+        ])
 
+    def __str__(self):
+        return f"CourseUserProgress - course:{self.course} - user:{self.user}"
 

@@ -8,23 +8,32 @@
         <img src="{% static course.image %}" alt="" width="300">
     </div>
     <div class="col-md-4">
-        <h5>About the course:</h5>
+        <h5>О курсе:</h5>
         <p>{{ course.description }}</p>
         <br>
-        <h5>Category:</h5>
+        <h5>Категория:</h5>
         <p>{{ course.category }}</p>
         <br>
-        <h5>Rating:</h5>
+        <h5>Рейтинг курса:</h5>
         <p>{{ course.rating }}</p>
         <br>
-        <h5>Chapters:</h5>
+        <h5>Главы:</h5>
             {% for chapter in course.chapter_set.all %}
                 <p class="card-text">{{ chapter.title }}</p>
             {% endfor %}
-        <a href="{% url 'course_enrollment' course.pk %}"
+            {% if course_result%}
+                <a href="{% url 'course_enrollment' course.pk %}"
                        class="btn btn-primary">
-                        Start course
-        </a>
+                        Продолжить курс
+                </a>
+                <h5>Ваш прогресс:</h5>
+                <p class="card-text">{{ course_result.score }}%</p>
+            {% else %}
+                <a href="{% url 'course_enrollment' course.pk %}"
+                       class="btn btn-primary">
+                        Начать курс
+                 </a>
+            {% endif %}
     </div>
 </div>
     <div class="comments">
