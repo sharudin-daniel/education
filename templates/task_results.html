@@ -5,12 +5,28 @@
     <div>
         {{ task.title }}
     </div>
-<p>Задание уже выполнено</p>
-
+    <h2>Задание уже выполнено</h2>
+    <h4>Ваш результат: {{ task_result.score }}%</h4>
     {% for result in question_results %}
-        <p> Вопрос: | {{ result.question }}</p>
-        <p> Правильный ответ: | {{ result.correct_answer }}</p>
-        <p> Ваш ответ: | {{ result.given_answer }}</p>
+        {% if result.given_answer == result.correct_answer %}
+            <div class="container-question p-3 text-light h6 bg-success">
+                <div> Вопрос: | {{ result.question }}</div>
+                <div> Правильный ответ: | {{ result.correct_answer }}</div>
+                <div> Ваш ответ: | {{ result.given_answer }}</div>
+            </div>
+        {% elif result.given_answer == ""%}
+            <div class="container-question p-3 text-light h6 bg-danger">
+                <div> Вопрос: | {{ result.question }}</div>
+                <div> Правильный ответ: | {{ result.correct_answer }}</div>
+                <div> Вы не ответили на вопрос(</div>
+            </div>
+        {% else %}
+            <div  class="container-question p-3 text-light h6 bg-danger">
+                <div> Вопрос: | {{ result.question }}</div>
+                <div> Правильный ответ: | {{ result.correct_answer }}</div>
+                <div> Ваш ответ: | {{ result.given_answer }}</div>
+            </div>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}

@@ -92,7 +92,11 @@ def task(request, pk):
                 questions.append(question)
             question_results = []
             correct_answer = None
+            score = 0
             task_result = TaskResult.objects.create(task=task, user=request.user, score=0)
+            for q in task.question_set.all():
+                if q not in questions:
+                    questions.append(q)
             for q in questions:
                 a_selected = request.POST.get(q.description)
 
@@ -100,12 +104,19 @@ def task(request, pk):
                 for a in questions_answers:
                     if a.correct:
                         correct_answer = a.answer
+                if a_selected is None:
+                    a_selected = ""
                 question_result = QuestionResult.objects.create(question=q, user=request.user, correct_answer=correct_answer,
                                                                     task_result=task_result, given_answer=a_selected)
                 question_results.append(question_result)
+                if question_result.given_answer == question_result.correct_answer:
+                    score += 1
 
-            # todo: поменять скор (сейчас нолик)
+            task_result.score = round(score / len(question_results), 2) * 100
+            task_result.save()
+
             context.update({"question_results": question_results})
+            context.update({"task_result": task_result})
             return render(request, 'task_results.html', context)
 
         else:
