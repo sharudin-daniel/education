@@ -47,6 +47,15 @@ def course_detail(request, pk):
     course_result = CourseResult.objects.filter(user=request.user).filter(course=course)
     if course_result:
         course_result = course_result[0]
+        counter = 0
+        score = 0
+        for chapter in course.chapter_set.all():
+            for task in chapter.task_set.all():
+                counter += 1
+                if TaskResult.objects.filter(user=request.user).filter(task=task):
+                    score += 1
+            course_result.score = round(score / counter * 100)
+            course_result.save()
 
     context = {
         'course': course,
