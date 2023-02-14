@@ -22,10 +22,16 @@
                 <p class="card-text">{{ chapter.title }}</p>
             {% endfor %}
             {% if course_result%}
-                <a href="{% url 'course_enrollment' course.pk %}"
-                       class="btn btn-primary">
-                        Продолжить курс
-                </a>
+                <div>
+                    <a href="{% url 'course_enrollment' course.pk %}"
+                           class="btn btn-primary">
+                            Продолжить курс
+                    </a>
+                    <a href="{% url 'course_drop_progress' course.pk %}"
+                           class="btn btn-danger">
+                            Сбросить прогресс
+                    </a>
+                </div>
                 <h5>Ваш прогресс:</h5>
                 <p class="card-text">{{ course_result.score }}%</p>
             {% else %}
