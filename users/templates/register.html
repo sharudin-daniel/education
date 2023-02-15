@@ -1,13 +1,37 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block page_content %}
-<h2>Register</h2>
+{##}
+{#<form method="post">#}
+{#    {% csrf_token %}#}
+{#    {{form}}#}
+{#    <input type="submit" value="Register">#}
+{#</form>#}
 
-<form method="post">
-    {% csrf_token %}
-    {{form}}
-    <input type="submit" value="Register">
-</form>
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <link rel="stylesheet" href="/static/registry.css">
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+</head>
+<body>
+	<div class="main-w3layouts wrapper">
+		<h1>Регистрация</h1>
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+				<form method="post">
+                    {% csrf_token %}
+					<input class="text" type="text" name="username" placeholder="Имя пользователя" required="">
+					<input class="text email" type="email" name="email" placeholder="Почта" required="">
+					<input class="text" type="password" name="password1" placeholder="Пароль" required="">
+					<input class="text w3lpass" type="password" name="password2" placeholder="Подтверждение пароля" required="">
 
-<a href="{% url 'login' %}">Back to login</a>
+					<input type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ">
+				</form>
+				<p>Уже есть аккаунт? <a href="{% url 'login' %}"> Войти в аккаунт!</a></p>
+			</div>
+		</div>
+
+	</div>
+</body>
+{#<a href="{% url 'login' %}">Back to login</a>#}
 {% endblock %}

@@ -4,6 +4,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from users.forms import CustomUserCreationForm
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def dashboard(request):
     return render(request, "dashboard.html")
 
@@ -20,3 +24,5 @@ def register(request):
             user.save()
             login(request, user)
             return redirect(reverse("dashboard"))
+        else:
+            logger.error("Форма не валидна")
