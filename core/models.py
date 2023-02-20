@@ -34,6 +34,7 @@ class Course(models.Model):
             MinValueValidator(1)
         ])
     numberOfUsers = models.IntegerField()
+    single_attempt_course = models.BooleanField()
     def __str__(self):
         return f"{self.title}"
 
