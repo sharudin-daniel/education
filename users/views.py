@@ -2,6 +2,8 @@
 from django.contrib.auth import login
 from django.shortcuts import redirect, render
 from django.urls import reverse
+
+from core.models import CourseResult
 from users.forms import CustomUserCreationForm
 
 import logging
@@ -9,7 +11,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 def dashboard(request):
-    return render(request, "dashboard.html")
+    context = {}
+    if request.user.is_authenticated:
+        course_results = CourseResult.objects.filter(user=request.user)
+        context.update({'course_results': course_results})
+    return render(request, "dashboard.html", context=context)
+
 
 def register(request):
     if request.method == "GET":
