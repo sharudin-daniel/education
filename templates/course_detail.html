@@ -22,11 +22,11 @@
         <br>
         <h5>Рейтинг курса:</h5>
         <p>{{ course.rating }}</p>
+        <h5>Порог успешного прохождения курса:</h5>
+        <p class="card-text">{{ course.pass_threshhold }}%</p>
             {% if course_result %}
                 <h5>Курс пройден на:</h5>
                 <p class="card-text">{{ course_result.score }}%</p>
-                <h5>Порог успешного прохождения курса:</h5>
-                <p class="card-text">{{ course.pass_threshhold }}%</p>
                 {% if course_result.score == 100 %}
                     {% if course_result.pass_threshhold >= course_result.course.pass_threshhold %}
                         <h3 style="color: green">Курс успешно завершен, ваш результат - {{ course_result.pass_threshhold }}%</h3>

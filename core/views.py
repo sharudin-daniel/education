@@ -1,3 +1,5 @@
+import random
+
 from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
@@ -146,6 +148,7 @@ def task(request, pk):
                 for a in q.answer_set.all():
                     answers.append(a.answer)
                 questions.append({str(q): answers})
+            random.shuffle(questions)
             context.update({"questions": questions})
             return render(request, 'task.html', context)
 
