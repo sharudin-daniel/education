@@ -53,8 +53,20 @@ def course_detail(request, pk):
                 counter += 1
                 if TaskResult.objects.filter(user=request.user).filter(task=task):
                     score += 1
-            course_result.score = round(score / counter * 100)
-            course_result.save()
+        course_result.score = round(score / counter * 100)
+
+        if course_result.score == 100:
+            questions = 0
+            questions_correct = 0
+            for chapter in course.chapter_set.all():
+                for task in chapter.task_set.all():
+                    task_result = TaskResult.objects.filter(user=request.user).filter(task=task)[0]
+                    for question_result in QuestionResult.objects.filter(user=request.user).filter(task_result=task_result):
+                        questions += 1
+                        if question_result.given_answer == question_result.correct_answer:
+                            questions_correct += 1
+            course_result.pass_threshhold = round(questions_correct / questions * 100)
+        course_result.save()
 
     context = {
         'course': course,

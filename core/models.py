@@ -34,6 +34,11 @@ class Course(models.Model):
             MinValueValidator(1)
         ])
     numberOfUsers = models.IntegerField()
+    pass_threshhold = models.IntegerField(default=0,
+        validators=[
+            MaxValueValidator(100),
+            MinValueValidator(0)
+        ])
     single_attempt_course = models.BooleanField()
     def __str__(self):
         return f"{self.title}"
@@ -105,6 +110,11 @@ class CourseResult(models.Model):
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField(validators=[
+            MaxValueValidator(100),
+            MinValueValidator(0)
+        ])
+    pass_threshhold = models.IntegerField(default=0,
+        validators=[
             MaxValueValidator(100),
             MinValueValidator(0)
         ])

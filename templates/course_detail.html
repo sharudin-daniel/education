@@ -22,12 +22,18 @@
         <br>
         <h5>Рейтинг курса:</h5>
         <p>{{ course.rating }}</p>
-        <br>
-        <h5>Главы:</h5>
-            {% for chapter in course.chapter_set.all %}
-                <p class="card-text">{{ chapter.title }}</p>
-            {% endfor %}
-            {% if course_result%}
+            {% if course_result %}
+                <h5>Курс пройден на:</h5>
+                <p class="card-text">{{ course_result.score }}%</p>
+                <h5>Порог успешного прохождения курса:</h5>
+                <p class="card-text">{{ course.pass_threshhold }}%</p>
+                {% if course_result.score == 100 %}
+                    {% if course_result.pass_threshhold >= course_result.course.pass_threshhold %}
+                        <h3 style="color: green">Курс успешно завершен, ваш результат - {{ course_result.pass_threshhold }}%</h3>
+                    {% else %}
+                        <h3 style="color: red">Курс завален, ваш результат - {{ course_result.pass_threshhold }}%</h3>
+                    {% endif %}
+                {% endif %}
                 <div>
                     <a href="{% url 'course_enrollment' course.pk %}"
                            class="btn btn-primary">
@@ -40,8 +46,6 @@
                         </a>
                     {% endif %}
                 </div>
-                <h5>Ваш прогресс:</h5>
-                <p class="card-text">{{ course_result.score }}%</p>
             {% else %}
                 <a href="{% url 'course_enrollment' course.pk %}"
                        class="btn btn-primary">
