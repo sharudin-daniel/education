@@ -74,6 +74,7 @@ class Task(models.Model):
 class Question(models.Model):
     task = models.ForeignKey(to=Task, on_delete=models.CASCADE)
     description = models.TextField()
+    tip = models.CharField(max_length=120 ,blank=True)
     def __str__(self):
         return f"{self.description}"
 

@@ -10,21 +10,27 @@
     {% for result in question_results %}
         {% if result.given_answer == result.correct_answer %}
             <div class="container-question p-3 text-light h6 bg-success">
-                <div> Вопрос:  {{ result.question }}</div>
+                <div> Вопрос:  {{ result.question.description }}</div>
                 <div> Правильный ответ:  {{ result.correct_answer }}</div>
                 <div> Ваш ответ:  {{ result.given_answer }}</div>
             </div>
         {% elif result.given_answer == ""%}
             <div class="container-question p-3 text-light h6 bg-danger">
-                <div> Вопрос:  {{ result.question }}</div>
+                <div> Вопрос:  {{ result.question.description }}</div>
                 <div> Правильный ответ:  {{ result.correct_answer }}</div>
                 <div> Вы не ответили на вопрос(</div>
+                {% if result.question.tip %}
+                    <div> Пояснение: {{ result.question.tip }}</div>
+                {% endif %}
             </div>
         {% else %}
             <div  class="container-question p-3 text-light h6 bg-danger">
-                <div> Вопрос:  {{ result.question }}</div>
+                <div> Вопрос:  {{ result.question.description }}</div>
                 <div> Правильный ответ:  {{ result.correct_answer }}</div>
                 <div> Ваш ответ:  {{ result.given_answer }}</div>
+                {% if result.question.tip %}
+                    <div> Пояснение: {{ result.question.tip }}</div>
+                {% endif %}
             </div>
         {% endif %}
     {% endfor %}
