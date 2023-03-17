@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block page_content %}
-<h1>Recommendation</h1>
+<h1>Ваши персональные рекомендации</h1>
 <div class="row">
 {% for course in courses %}
     <div class="col-md-4">
@@ -12,7 +12,7 @@
                 <p class="card-text">{{ course.description }}</p>
                 <a href="{% url 'course_detail' course.pk %}"
                    class="btn btn-primary">
-                    Try recommendation!
+                    Попробовать!
                 </a>
             </div>
         </div>
