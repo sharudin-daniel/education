@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% block page_content %}
-<h1>Ваши персональные рекомендации</h1>
 <div class="row">
-{% for course in courses %}
+{% if courses %}
+    {% for course in courses %}
+        <h1>Ваши персональные рекомендации:</h1>
     <div class="col-md-4">
         <div class="card mb-2">
             <img class="card-img-top" src="{% static course.image %}">
@@ -18,5 +19,9 @@
         </div>
     </div>
     {% endfor %}
+{% else %}
+    <h1>Вы прошли все курсы, так держать!!</h1>
+{% endif %}
+
 </div>
 {% endblock %}
