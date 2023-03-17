@@ -10,4 +10,5 @@ urlpatterns = [
     path("course-enrollment/<int:pk>/", views.course_enrollment, name="course_enrollment"),
     path("course-drop-progress/<int:pk>/", views.course_drop_progress, name="course_drop_progress"),
     path("task/<int:pk>/", views.task, name="task"),
+    path("recommend/simular/", views.recommend_simular, name="recommend_simular"),
 ]

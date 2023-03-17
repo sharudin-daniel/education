@@ -1,14 +1,17 @@
 import random
 
+from django.http import Http404
 from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.db.models import Case, When
 
 from core.forms import CommentForm
 from core.models import Course, Task, Question, Answer, CourseResult, TaskResult, QuestionResult
 
 import logging
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 def landing_index(request):
@@ -166,3 +169,34 @@ def course_drop_progress(request, pk):
                     questionResult[0].delete()
 
     return redirect(reverse('course_detail', kwargs={'pk':pk}))
+
+
+def get_similar(course_id,score,corrMatrix):
+    similar_scores = corrMatrix[course_id]*(score-2.5)
+    similar_scores = similar_scores.sort_values(ascending=False)
+    return similar_scores
+
+@login_required
+def recommend_simular(request):
+
+    course_result_rating=pd.DataFrame(list(CourseResult.objects.all().values()))
+
+    userRatings = course_result_rating.pivot_table(index=['user_id'],columns=['course_id'],values='score')
+    userRatings = userRatings.fillna(0,axis=1)
+    corrMatrix = userRatings.corr(method='pearson')
+
+    user = pd.DataFrame(list(CourseResult.objects.filter(user=request.user).values())).drop(['user_id','id','pass_threshhold'],axis=1)
+    user_filtered = [tuple(x) for x in user.values]
+    courses_passed_ids = [each[0] for each in user_filtered]
+
+    similar_course = pd.DataFrame()
+    for course, score in user_filtered:
+        similar_course = similar_course.append(get_similar(course, score, corrMatrix), ignore_index = True)
+
+    couse_ids = list(similar_course.sum().sort_values(ascending=False).index)
+    course_ids_recommend = [each for each in couse_ids if each not in courses_passed_ids]
+    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(course_ids_recommend)])
+    course_list = list(Course.objects.filter(id__in = course_ids_recommend).order_by(preserved)[:1])
+
+    context = {'courses': course_list}
+    return render(request, 'recommend-simular.html', context)
